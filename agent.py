@@ -3,6 +3,7 @@ import rich
 import json
 from mcp_client import MyMCPClient
 import asyncio
+import os
 
 
 class TripPlannerAgent():
@@ -13,7 +14,10 @@ class TripPlannerAgent():
         with open("skills.md", "r") as f:
             self.skills = f.read()
         
-        self.model_name = "openai/gpt-oss-120b"
+        self.model_name = os.getenv("GROQ_MODEL")
+        if not self.model_name:
+            raise ValueError("GROQ_MODEL environment variable not set.")
+        
         self.client = Groq()    
 
         self.mcp_client = MyMCPClient()
